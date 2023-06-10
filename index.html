@@ -1,0 +1,269 @@
+
+<!doctype html>
+
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+  <meta name="theme-color" content="#4F7DC9">
+  <meta charset="UTF-8">
+  <title>Introduction of Unity in Flutter</title>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Source+Code+Pro:400|Roboto:400,300,400italic,500,700|Roboto+Mono">
+  <link rel="stylesheet" href="//fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://storage.googleapis.com/claat-public/codelab-elements.css">
+  <style>
+    .success {
+      color: #1e8e3e;
+    }
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <google-codelab-analytics gaid="UA-49880327-14"></google-codelab-analytics>
+  <google-codelab codelab-gaid=""
+                  id="intro-flutter-unity"
+                  title="Introduction of Unity in Flutter"
+                  environment="web"
+                  feedback-link="https://github.com/emmanuelCode/unity-flutter/issues/new">
+    
+      <google-codelab-step label="Getting Started" duration="0">
+        <h2 is-upgraded>Things to keep in mind</h2>
+<ul>
+<li>This codelab was tested with ubuntu in mind using the Terminal. For mac and windows, see their respective equivalent.</li>
+<li>The IDE I&#39;ve used for this codelab is VSCode, some extensions or plugins may not be available on other IDEs.</li>
+<li>This is my own codelab, I am not part of google nor I have been endorsed by them.</li>
+</ul>
+<h2 class="checklist" is-upgraded>What you&#39;ll learn</h2>
+<ul class="checklist">
+<li>✅ Set up your Flutter and Unity project.</li>
+<li>✅ Embbed and run a Unity game inside Flutter.</li>
+<li>✅ Exchange data between Flutter and Unity.</li>
+</ul>
+<h2 is-upgraded>Prerequises</h2>
+<ol type="1">
+<li>A bit of Flutter knowledge. The Flutter team <a href="https://docs.flutter.dev/get-started/codelab" target="_blank">codelabs</a> and the <a href="https://docs.flutter.dev/cookbook" target="_blank">cookbook</a> should help you get started.</li>
+<li>Install <a href="https://docs.unity3d.com/hub/manual/InstallHub.html#install-hub-linux" target="_blank">Unity Hub</a> for Ubuntu and download the latest Unity editor(LTS). While installing, you have to check to download the android tools or you won&#39;t export the project to Flutter. If you&#39;re building for IOS, you have to check to download the ios tools if you want to export for ios but I won&#39;t be covering ios at this time.</li>
+<li>You&#39;ll also need to install the <a href="https://learn.microsoft.com/en-ca/dotnet/core/install/linux-ubuntu-2204#install-the-sdk" target="_blank">.Net SDK</a> for Ubuntu along with the <a href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp" target="_blank">C# extension</a> in VSCode for syntax hightlighting and code completion. You can find a complete <a href="https://code.visualstudio.com/docs/other/unity" target="_blank">guide</a> in VSCode website.</li>
+<li>A bit of Unity knowledge. Unity has good <a href="https://unity.com/learn/get-started" target="_blank">tutorials</a> to help you get started.</li>
+</ol>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Set Up Projects" duration="0">
+        <p>To begin, create a new flutter project and add a unity folder. Once done, create a new unity project and set the path to the &#34;unity&#34; folder you just created. Your Flutter and Unity project should look like this:</p>
+<pre><code>📦flutter_unity_sample -&gt; Flutter Project
+ ┣ 📂android
+ ┣ 📂ios
+ ┣ 📂lib
+ ┃ ┗ 📜main.dart
+ ┣ 📂test
+ ┣ 📂unity
+ ┃ ┗ 📂sample_game -&gt; Unity Project
+ ┣ 📜README.md
+ ┣ 📜analysis_options.yaml
+ ┣ 📜flutter_unity_sample.iml
+ ┣ 📜pubspec.lock
+ ┗ 📜pubspec.yaml
+</code></pre>
+<aside class="special"><p> If your using source control it maybe a good idea to &#34;.gitignore&#34; some files in your root unity project you can get this <a href="https://github.com/github/gitignore/blob/main/Unity.gitignore" target="_blank">file</a> in github official repository.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Install Packages" duration="0">
+        <p>In order to Flutter to work with Unity you&#39;ll need two components: the <em>flutter_unity_widget</em> package and the <em>fuw-(version).unitypackage</em> for Unity.</p>
+<ul>
+<li>To install the flutter_unity_widget run in Terminal <code>flutter pub add flutter_unity_widget</code> which should install the latest version.</li>
+<li>To install the fuw-(version).unitypackage go to the <a href="https://github.com/juicycleff/flutter-unity-view-widget/tree/master/unitypackages" target="_blank">package repository</a>. Under the unitypackage folder download the latest version. While in the Unity Editor drag and drop the fuw-(version).unitypackage to the Editor to install. After unpacking, you&#39;ll see a new menu item called Flutter.</li>
+</ul>
+<aside class="special"><p> Since the Unity Editor will only unpack the .unitypackage, it won&#39;t save the source file. So, it might be a good idea to save fuw-(version).unitypackage to your Assets folder. To do this, in your Unity Editor right click your Assets folder and select &#34;Open Containing Folder&#34; then drag and drop the fuw-(version).unitypackage. Doing this will allow you to open your unitypackage file inside Unity and keep your source file for version control in case you want to track the version of your unitypackage your using.</p>
+</aside>
+<aside class="warning"><p> If you mixed older .unitypackage and Unity Editor version it may not work. So I advise you to always use the latest Unity Editor (LTS) along with latest fuw-(version).unitypackage. You can find more info <a href="https://github.com/juicycleff/flutter-unity-view-widget/tree/master/unitypackages#which-one-do-i-pick" target="_blank">here</a>.</p>
+</aside>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Exporting and Testing" duration="0">
+        <p>Now that we have the packages installed, we will make a small test and export/build the project to Flutter to know if everything work properly.</p>
+<h2 is-upgraded>Adding The Code</h2>
+<p>To test we need to add some components to Unity, so we will try to rotate a cube as a test. Add a cube game object in your editor then in the cube inspector we will add a &#34;Unity Message Manager&#34; script along with our own script &#34;RotateCube&#34;. This will be the code for the cube:</p>
+<ul>
+<li>RotationCube.cs</li>
+</ul>
+<pre><code language="language-csharp" class="language-csharp">using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using FlutterUnityIntegration; //import library code
+
+public class RotateCube : MonoBehaviour
+{
+    // this will help us send message to Flutter
+    private UnityMessageManager unityMessageManganer;
+    private float rotateSpeed = 0;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+     unityMessageManganer = GetComponent&lt;UnityMessageManager&gt;();  
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+     transform.Rotate(Vector3.up * Time.deltaTime * rotateSpeed); 
+
+     //send to flutter deltaTime
+     unityMessageManganer.SendMessageToFlutter($&#34;DeltaTime: {Time.deltaTime}&#34;);  
+    }
+
+    // this is a method we created that we will call from Flutter to invoke
+    public void MoveCubeFromFlutter(string value){ 
+
+        rotateSpeed = float.Parse(value);
+
+    }
+}
+</code></pre>
+<p>This is code in the Flutter side:</p>
+<ul>
+<li>main.dart</li>
+</ul>
+<pre><code language="language-dart" class="language-dart">import &#39;package:flutter/material.dart&#39;;
+import &#39;package:flutter_unity_widget/flutter_unity_widget.dart&#39;;
+
+void main() {
+  runApp(const MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: &#39;Flutter Unity Demo&#39;,
+      theme: ThemeData(
+        sliderTheme: const SliderThemeData(
+            showValueIndicator: ShowValueIndicator.always),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+        useMaterial3: true,
+      ),
+      home: const MyHomePage(title: &#39;Flutter Unity Sample&#39;),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  final String title;
+
+  @override
+  State&lt;MyHomePage&gt; createState() =&gt; _MyHomePageState();
+}
+
+class _MyHomePageState extends State&lt;MyHomePage&gt; {
+  late UnityWidgetController _unityWidgetController;
+  double sliderValue = 0;
+  void _updateSliderValue(double value) {
+    setState(() {
+      sliderValue = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        title: Text(widget.title),
+      ),
+      body: Center(
+        child: Stack(
+          children: [
+            UnityWidget(
+              onUnityCreated: onUnityCreated,
+              onUnityMessage: onUnityMessage,
+            ),
+            Positioned(
+              bottom: 64,
+              left: 16,
+              right: 16,
+              child: SizedBox(
+                height: 64,
+                width: MediaQuery.of(context).size.width,
+                child: Card(
+                  margin: const EdgeInsets.all(8.0),
+                  child: Slider(
+                    label: sliderValue.round().toString(),
+                    min: 0,
+                    max: 200,
+                    onChanged: (value) =&gt; moveCubeFromFlutter(&#39;$value&#39;),
+                    value: sliderValue,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  // Communcation from Flutter to Unity
+  void moveCubeFromFlutter(String speed) {
+    _unityWidgetController.postMessage(
+      &#39;Cube&#39;, //gameObjectName
+      &#39;MoveCubeFromFlutter&#39;, // methodName
+      speed,
+    );
+
+    // update slider ui
+    _updateSliderValue(double.parse(speed));
+  }
+
+  // Communication from Unity to Flutter
+  // you should see the message of the deltaTime in the debug logs
+  void onUnityMessage(message) {
+    debugPrint(&#39;Received message from unity: ${message.toString()}&#39;);
+  }
+
+  // Callback that connects the created controller to the unity controller
+  void onUnityCreated(controller) {
+    _unityWidgetController = controller;
+  }
+}
+
+</code></pre>
+<h2 is-upgraded>Exporting The Build</h2>
+<p>Now that your code is ready, you can export the build. Save your Unity Scene, then go to the Flutter menu item and select &#34;Export Android (Release)&#34;. When the build is done loading, go to the Flutter counterpart in VScode look for your gradle file <code>android/app/build.gradle</code> and change the line <code>minSdkVersion flutter.minSdkVersion</code> to <code>minSdkVersion 22</code>.</p>
+<p>Run the code in your smartphone and you should be able to change the rotation of the cube with the slider widget. You should also see in the logs the <code>Time.detlaTime</code> value that Unity is sending to Flutter.</p>
+
+
+      </google-codelab-step>
+    
+      <google-codelab-step label="Congratulations!" duration="0">
+        <p>You completed the codelab, you can now use that knowledge to build astounding game to Flutter.</p>
+<p>If you have trouble running the app, you can compare your code from the github repository.</p>
+<p><a href="https://github.com/emmanuelCode/unity-flutter" target="_blank"><paper-button class="colored" raised>View Codelab Code</paper-button></a></p>
+<h2 is-upgraded>Feedback</h2>
+<p>This codelab may have some issues and to me this is only a draft, they are improvements that can be done. If you found a problem or have suggestions, you can click the <code>report a mistake</code> on the bottom left of the codelab it will open a github issue.</p>
+
+
+      </google-codelab-step>
+    
+  </google-codelab>
+
+  <script src="https://storage.googleapis.com/claat-public/native-shim.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/custom-elements.min.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/prettify.js"></script>
+  <script src="https://storage.googleapis.com/claat-public/codelab-elements.js"></script>
+  <script src="//support.google.com/inapp/api.js"></script>
+
+</body>
+</html>
