@@ -43,8 +43,8 @@
 <h2 is-upgraded>Prerequises</h2>
 <ol type="1">
 <li>A bit of Flutter knowledge. The Flutter team <a href="https://docs.flutter.dev/get-started/codelab" target="_blank">codelabs</a> and the <a href="https://docs.flutter.dev/cookbook" target="_blank">cookbook</a> should help you get started.</li>
-<li>Install <a href="https://docs.unity3d.com/hub/manual/InstallHub.html#install-hub-linux" target="_blank">Unity Hub</a> for Ubuntu and download the latest Unity editor(LTS). While installing, you have to check to download the android tools or you won&#39;t export the project to Flutter. If you&#39;re building for IOS, you have to check to download the ios tools if you want to export for ios but I won&#39;t be covering ios at this time.</li>
-<li>You&#39;ll also need to install the <a href="https://learn.microsoft.com/en-ca/dotnet/core/install/linux-ubuntu-2204#install-the-sdk" target="_blank">.Net SDK</a> for Ubuntu along with the <a href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp" target="_blank">C# extension</a> in VSCode for syntax hightlighting and code completion. You can find a complete <a href="https://code.visualstudio.com/docs/other/unity" target="_blank">guide</a> in VSCode website.</li>
+<li>Install <a href="https://docs.unity3d.com/hub/manual/InstallHub.html#install-hub-linux" target="_blank">Unity Hub</a> for Ubuntu and download the latest Unity Editor(LTS). While installing, you&#39;ll have to check out &#34;Android Build Support&#34;/&#34;OpenJDK&#34;/&#34;Android SDK &amp; NDK Tools&#34; or you won&#39;t be able to export the project to Flutter. If you&#39;re building for ios, you have to check out &#34;iOS Build Support&#34;. I won&#39;t be covering ios at this time.</li>
+<li>You&#39;ll also need to install the <a href="https://learn.microsoft.com/en-ca/dotnet/core/install/linux-ubuntu#register-the-microsoft-package-repository" target="_blank">.NET SDK</a> package repository for Ubuntu along with the <a href="https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csharp" target="_blank">C# extension</a> in VSCode for syntax hightlighting and code completion. You can find a complete <a href="https://code.visualstudio.com/docs/other/unity" target="_blank">guide</a> in VSCode website.</li>
 <li>A bit of Unity knowledge. Unity has good <a href="https://unity.com/learn/get-started" target="_blank">tutorials</a> to help you get started.</li>
 </ol>
 
@@ -52,7 +52,7 @@
       </google-codelab-step>
     
       <google-codelab-step label="Set Up Projects" duration="0">
-        <p>To begin, create a new flutter project and add a unity folder. Once done, create a new unity project and set the path to the &#34;unity&#34; folder you just created. Your Flutter and Unity project should look like this:</p>
+        <p>To begin, create a new Flutter project and add a &#34;unity&#34; folder. Once done, create a new Unity project and set the path to the &#34;unity&#34; folder you just created. Your Flutter and Unity project should look like this:</p>
 <pre><code>📦flutter_unity_sample -&gt; Flutter Project
  ┣ 📂android
  ┣ 📂ios
@@ -74,10 +74,10 @@
       </google-codelab-step>
     
       <google-codelab-step label="Install Packages" duration="0">
-        <p>In order to Flutter to work with Unity you&#39;ll need two components: the <em>flutter_unity_widget</em> package and the <em>fuw-(version).unitypackage</em> for Unity.</p>
+        <p>In order to Flutter to work with Unity you&#39;ll need two components: the <strong>flutter_unity_widget</strong> package for Flutter and the <strong>fuw-(version).unitypackage</strong> for Unity.</p>
 <ul>
 <li>To install the flutter_unity_widget run in Terminal <code>flutter pub add flutter_unity_widget</code> which should install the latest version.</li>
-<li>To install the fuw-(version).unitypackage go to the <a href="https://github.com/juicycleff/flutter-unity-view-widget/tree/master/unitypackages" target="_blank">package repository</a>. Under the unitypackage folder download the latest version. While in the Unity Editor drag and drop the fuw-(version).unitypackage to the Editor to install. After unpacking, you&#39;ll see a new menu item called Flutter.</li>
+<li>To install the fuw-(version).unitypackage go to the <a href="https://github.com/juicycleff/flutter-unity-view-widget/tree/master/unitypackages" target="_blank">package repository</a>. Under the &#34;unitypackage&#34; folder download the latest version. While in the Unity Editor drag and drop the fuw-(version).unitypackage to the Editor to install. After unpacking, you&#39;ll see a new menu item called Flutter.</li>
 </ul>
 <aside class="special"><p> Since the Unity Editor will only unpack the .unitypackage, it won&#39;t save the source file. So, it might be a good idea to save fuw-(version).unitypackage to your Assets folder. To do this, in your Unity Editor right click your Assets folder and select &#34;Open Containing Folder&#34; then drag and drop the fuw-(version).unitypackage. Doing this will allow you to open your unitypackage file inside Unity and keep your source file for version control in case you want to track the version of your unitypackage your using.</p>
 </aside>
@@ -88,9 +88,10 @@
       </google-codelab-step>
     
       <google-codelab-step label="Exporting and Testing" duration="0">
-        <p>Now that we have the packages installed, we will make a small test and export/build the project to Flutter to know if everything work properly.</p>
+        <p>Now that we have all the packages installed, we will make a small test and export/build the project to Flutter to know if everything work properly. You will rotate a cube as a test.</p>
 <h2 is-upgraded>Adding The Code</h2>
-<p>To test we need to add some components to Unity, so we will try to rotate a cube as a test. Add a cube game object in your editor then in the cube inspector we will add a &#34;Unity Message Manager&#34; script along with our own script &#34;RotateCube&#34;. This will be the code for the cube:</p>
+<p>To test, we need to add some components to Unity. Add a cube game object in your editor then in the cube inspector you will add a &#34;Unity Message Manager&#34; script along with your own &#34;RotateCube&#34; script.</p>
+<p>This is the code in Unity for the cube:</p>
 <ul>
 <li>RotationCube.cs</li>
 </ul>
@@ -241,18 +242,18 @@ class _MyHomePageState extends State&lt;MyHomePage&gt; {
 
 </code></pre>
 <h2 is-upgraded>Exporting The Build</h2>
-<p>Now that your code is ready, you can export the build. Save your Unity Scene, then go to the Flutter menu item and select &#34;Export Android (Release)&#34;. When the build is done loading, go to the Flutter counterpart in VScode look for your gradle file <code>android/app/build.gradle</code> and change the line <code>minSdkVersion flutter.minSdkVersion</code> to <code>minSdkVersion 22</code>.</p>
-<p>Run the code in your smartphone and you should be able to change the rotation of the cube with the slider widget. You should also see in the logs the <code>Time.detlaTime</code> value that Unity is sending to Flutter.</p>
+<p>Now that your code is ready, you can export the build. Save your Unity Scene, then go to the Flutter menu item and select &#34;Export Android (Release)&#34;. When the build is done loading, go to the Flutter counterpart in VSCode. Look for your gradle file in <code>android/app/build.gradle</code> and change the line <code>minSdkVersion flutter.minSdkVersion</code> to <code>minSdkVersion 22</code>.</p>
+<p>Run the code in your smartphone. You should be able to change the rotation of the cube with the slider widget. You should also see in the logs the <code>Time.detlaTime</code> value that Unity is sending to Flutter.</p>
 
 
       </google-codelab-step>
     
       <google-codelab-step label="Congratulations!" duration="0">
-        <p>You completed the codelab, you can now use that knowledge to build astounding game to Flutter.</p>
+        <p>You completed the codelab, you can now use your newly acquired knowledge to build astounding game to Flutter.</p>
 <p>If you have trouble running the app, you can compare your code from the github repository.</p>
 <p><a href="https://github.com/emmanuelCode/unity-flutter" target="_blank"><paper-button class="colored" raised>View Codelab Code</paper-button></a></p>
 <h2 is-upgraded>Feedback</h2>
-<p>This codelab may have some issues and to me this is only a draft, they are improvements that can be done. If you found a problem or have suggestions, you can click the <code>report a mistake</code> on the bottom left of the codelab it will open a github issue.</p>
+<p>This codelab may have some issues and to me this is only a draft, they are improvements that can be done. If you found a problem or have suggestions, you can click the <code>report a mistake</code> on the bottom left of the codelab. It will open a github issue.</p>
 
 
       </google-codelab-step>
